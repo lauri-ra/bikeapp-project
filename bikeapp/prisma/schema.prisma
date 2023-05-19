@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model journeys {
+  id                     Int      @id @unique @default(autoincrement())
+  return                 DateTime @db.Timestamptz(6)
+  departure_station_id   Int
+  departure_station_name String
+  return_station_id      Int
+  return_station_name    String
+  covered_distance_m     Float
+  duration_s             Int
+  departure              DateTime @db.Timestamptz(6)
+}
