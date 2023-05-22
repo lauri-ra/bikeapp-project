@@ -1,9 +1,19 @@
-import axios from 'axios';
-import { Journey } from '@/types';
+import { prisma } from '../../prisma/connect';
+import Link from 'next/link';
 
-export default async function Page() {
-	const response = await axios.get('http://localhost:3000/api/journeys');
-	const journeys: Journey[] = await response.data;
+export default async function Page({
+	searchParams,
+}: {
+	searchParams: { [key: string]: string | string[] | undefined };
+}) {
+	// Make sure that the page is of type string. If it is, turn it to a number, else default to 1.
+	const page = typeof searchParams.page === 'string' ? +searchParams.page : 1;
+
+	// Take 10 elements from the db according to the current page location.
+	const journeys = await prisma.journeys.findMany({
+		take: 10,
+		skip: (page - 1) * 10,
+	});
 
 	return (
 		<div className='relative mx-8 overflow-x-auto rounded-lg ring-1 ring-neutral-300'>
@@ -27,6 +37,10 @@ export default async function Page() {
 					))}
 				</tbody>
 			</table>
+			<div>
+				<Link href={`/journeys/?page=${page + 1}`}>Next</Link>
+				<Link href={`/journeys/?page=${page - 1}`}>Prev</Link>
+			</div>
 		</div>
 	);
 }

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '../../../prisma/connect';
 
+// TODO: Is this route needed??
 export async function GET() {
 	console.log('GET request');
 
