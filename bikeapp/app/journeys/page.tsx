@@ -13,9 +13,6 @@ export default async function Page({
 	// Make sure that the page is of type string. If it is, turn it to a number, else default to 1.
 	const page = typeof searchParams.page === 'string' ? +searchParams.page : 1;
 
-	if (page < 0 || page > journeyCount) {
-		return null;
-	}
 	// Take 10 elements from the db according to the current page location.
 	const journeys = await prisma.journeys.findMany({
 		take: 10,
@@ -44,9 +41,23 @@ export default async function Page({
 					))}
 				</tbody>
 			</table>
-			<div>
-				{page > 1 && <Link href={`/journeys/?page=${page - 1}`}>Prev</Link>}
-				{page < maxPage && <Link href={`/journeys/?page=${page + 1}`}>Next</Link>}
+			<div className='flex items-center justify-center'>
+				{page > 1 && (
+					<Link
+						href={`/journeys/?page=${page - 1}`}
+						className='ml-2 rounded-lg bg-sky-500 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-600'
+					>
+						Prev
+					</Link>
+				)}
+				{page < maxPage && (
+					<Link
+						href={`/journeys/?page=${page + 1}`}
+						className='ml-2 rounded-lg bg-sky-500 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-600'
+					>
+						Next
+					</Link>
+				)}
 			</div>
 		</div>
 	);
