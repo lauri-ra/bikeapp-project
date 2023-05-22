@@ -6,9 +6,16 @@ export default async function Page({
 }: {
 	searchParams: { [key: string]: string | string[] | undefined };
 }) {
+	// These help with the conditial rendering of the nav buttons.
+	const journeyCount = await prisma.journeys.count();
+	const maxPage = Math.round(journeyCount / 10);
+
 	// Make sure that the page is of type string. If it is, turn it to a number, else default to 1.
 	const page = typeof searchParams.page === 'string' ? +searchParams.page : 1;
 
+	if (page < 0 || page > journeyCount) {
+		return null;
+	}
 	// Take 10 elements from the db according to the current page location.
 	const journeys = await prisma.journeys.findMany({
 		take: 10,
@@ -38,8 +45,8 @@ export default async function Page({
 				</tbody>
 			</table>
 			<div>
-				<Link href={`/journeys/?page=${page + 1}`}>Next</Link>
-				<Link href={`/journeys/?page=${page - 1}`}>Prev</Link>
+				{page > 1 && <Link href={`/journeys/?page=${page - 1}`}>Prev</Link>}
+				{page < maxPage && <Link href={`/journeys/?page=${page + 1}`}>Next</Link>}
 			</div>
 		</div>
 	);
