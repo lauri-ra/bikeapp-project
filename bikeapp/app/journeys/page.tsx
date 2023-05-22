@@ -22,7 +22,7 @@ export default async function Page({
 	return (
 		<div className='relative mx-8 overflow-x-auto rounded-lg ring-1 ring-neutral-300'>
 			<table className='w-full table-auto content-center text-left'>
-				<thead className='bg-neutral-300 text-xs font-thin uppercase text-gray-700 drop-shadow'>
+				<thead className='bg-sky-300 text-xs font-thin uppercase text-gray-700 drop-shadow'>
 					<tr>
 						<th className='px-6 py-3'>Departure station</th>
 						<th className='px-6 py-3'>Return station</th>
