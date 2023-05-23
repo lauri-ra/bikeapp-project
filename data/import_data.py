@@ -1,7 +1,9 @@
 import pandas as pd
+import numpy as np
 from supabase import create_client
 from dotenv import load_dotenv
 import os
+import time
 
 # Get variables from .env file
 load_dotenv('../.env')
@@ -11,20 +13,28 @@ key = os.getenv('SB_KEY')
 # Connect to the database
 supabase = create_client(url, key)
 
+print("Reading data from CSV files...")
+
 # Read the data from CSV files
 data_may = pd.read_csv('2021-05.csv')
 data_june = pd.read_csv('2021-06.csv')
 data_july = pd.read_csv('2021-07.csv')
+stations = pd.read_csv('locationdata.csv')
 
-# Combine CSVs into one dataframe
-df = pd.concat([data_may, data_june, data_july])
+# Combine journey CSVs into one dataframe
+journey_df = pd.concat([data_may, data_june, data_july])
+
+print("Processing data...")
 
 # Drop empty cells and duplicate rows
-df = df.dropna()
-df = df.drop_duplicates()
+journey_df = journey_df.dropna()
+journey_df = journey_df.drop_duplicates()
+
+# Remove the the columns that are not needed
+stations = stations.drop(stations.columns[[0,4,9]], axis=1)
 
 # Rename columns to match those in the database
-df.columns = [
+journey_df.columns = [
     'departure',
     'return',
     'departure_station_id',
@@ -35,21 +45,59 @@ df.columns = [
     'duration_s'
 ]
 
+stations.columns = [
+    'station_id',
+    'station_name_fi',
+    'station_name_swe',
+    'address_fi',
+    'address_swe',
+    'city_fi',
+    'city_swe',
+    'capacity',
+    'lat',
+    'lon'
+]
+
 # Drop cells with journeys that lasted less than 10s
-df = df[df['duration_s'] > 10]
+journey_df = journey_df[journey_df['duration_s'] > 10]
 
 # Drop cells with journeys that had a distance shorter than 10m
-df = df[df['covered_distance_m'] > 10]
+journey_df = journey_df[journey_df['covered_distance_m'] > 10]
 
-# Turn the dataframe into a list of dictionaries
-#data = df.to_dict(orient='records')
+# Batch size
+batch_size = 10000
 
-# Sample data for testing purposes
-testdf = df.head(35)
-testdata = testdf.to_dict(orient='records')
+# Split the dataframe into smaller chunks
+chunks = np.array_split(journey_df, len(journey_df) // batch_size)
 
-# Push the dict to the database
-result = supabase.table('journeys').insert(testdata).execute()
+# Process and push each chunk
+print("Importing journey data in chunks...")
+total_chunks = len(chunks)
+for i, chunk in enumerate(chunks, 1):
+    try:
+        # Convert the chunk to a list of dictionaries. Supabase requires this format.
+        chunk_data = chunk.to_dict(orient='records')
+        
+        # Push the chunk to the database
+        supabase.table('journeys').insert(chunk_data).execute()
+        
+        # Print progress on the same line
+        print(f"Processing chunk {i}/{total_chunks}", end="\r", flush=True)
+        
+    except Exception as e:
+        # Handle the error
+        print("Error occurred:", str(e))
+        
+        # Wait for some time before retrying
+        print("Retrying...")
+        time.sleep(1)
+        
+        # Retry the failed request
+        supabase.table('journeys').insert(chunk_data).execute()
 
-# Check the result
-print(result)
+print("Importing station data...")
+# Convert the dataframe to a list of dictionaries. Supabase requires this format.
+station_data = stations.to_dict(orient='records')
+supabase.table('stations').insert(station_data).execute()
+
+print("\nData import complete.")
