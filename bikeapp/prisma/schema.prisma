@@ -8,7 +8,7 @@ datasource db {
 }
 
 model journeys {
-  id                     Int      @id @unique @default(autoincrement())
+  id                     Int      @id @default(autoincrement())
   return                 DateTime @db.Timestamptz(6)
   departure_station_id   Int
   departure_station_name String
@@ -17,4 +17,17 @@ model journeys {
   covered_distance_m     Float
   duration_s             Int
   departure              DateTime @db.Timestamptz(6)
+}
+
+model stations {
+  station_id       Int      @id @unique
+  station_name_fi  String?
+  station_name_swe String?
+  address_fi       String?
+  address_swe      String?
+  city_fi          String?
+  city_swe         String?
+  capacity         Int?
+  lat              Decimal? @db.Decimal
+  lon              Decimal? @db.Decimal
 }
