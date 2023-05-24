@@ -23,8 +23,10 @@ export default async function Page({
 		<div>
 			{stations.map((station) => (
 				<div key={station.station_id} className='my-2 border-2'>
-					<div>{station.station_id}</div>
-					<div>{station.station_name_fi}</div>
+					<Link href={`/stations/${station.station_id}`}>
+						<div>{station.station_id}</div>
+						<div>{station.station_name_fi}</div>
+					</Link>
 				</div>
 			))}
 			<div className='flex items-center justify-center'>

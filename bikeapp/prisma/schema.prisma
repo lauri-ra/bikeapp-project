@@ -20,14 +20,14 @@ model journeys {
 }
 
 model stations {
-  station_id       Int      @id @unique
-  station_name_fi  String?
-  station_name_swe String?
-  address_fi       String?
-  address_swe      String?
+  station_id       Int     @id @unique
+  station_name_fi  String
+  station_name_swe String
+  address_fi       String
+  address_swe      String
   city_fi          String?
   city_swe         String?
-  capacity         Int?
-  lat              Decimal? @db.Decimal
-  lon              Decimal? @db.Decimal
+  capacity         Int
+  lat              Decimal @db.Decimal
+  lon              Decimal @db.Decimal
 }
