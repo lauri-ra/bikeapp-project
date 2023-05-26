@@ -7,9 +7,16 @@ interface StationCardProps {
 	departures: number;
 	returns: number;
 	topReturns: Journey[];
+	topDepartures: Journey[];
 }
 
-const StationCard: React.FC<StationCardProps> = ({ station, departures, returns, topReturns }) => {
+const StationCard: React.FC<StationCardProps> = ({
+	station,
+	departures,
+	returns,
+	topReturns,
+	topDepartures,
+}) => {
 	const city = station?.city_fi === ' ' ? 'city not specified' : station?.city_fi;
 
 	return (
@@ -31,8 +38,16 @@ const StationCard: React.FC<StationCardProps> = ({ station, departures, returns,
 				{topReturns.map((station) => (
 					<div key={station.return_station_id} className='my-2 border-2'>
 						<Link href={`/stations/${station.return_station_id}`}>
-							<div>{station.return_station_id}</div>
-							<div>{station.return_station_name}</div>
+							<li>{station.return_station_name}</li>
+						</Link>
+					</div>
+				))}
+
+				<div className='font-semibold'>Top stations for journeys ending to this station</div>
+				{topDepartures.map((station) => (
+					<div key={station.departure_station_id} className='my-2 border-2'>
+						<Link href={`/stations/${station.departure_station_id}`}>
+							<li>{station.departure_station_name}</li>
 						</Link>
 					</div>
 				))}
