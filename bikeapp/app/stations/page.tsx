@@ -1,4 +1,4 @@
-import { prisma } from '../../prisma/connect';
+import { Station } from '@/types';
 import Link from 'next/link';
 
 export default async function Page({
@@ -6,22 +6,13 @@ export default async function Page({
 }: {
 	searchParams: { [key: string]: string | string[] | undefined };
 }) {
-	// These help with the conditial rendering of the nav buttons.
-	const stationCount = await prisma.stations.count();
-	const maxPage = Math.round(stationCount / 10);
-
-	// Make sure that the page is of type string. If it is, turn it to a number, else default to 1.
-	const page = typeof searchParams.page === 'string' ? +searchParams.page : 1;
-
-	// Take 10 elements from the db according to the current page location.
-	const stations = await prisma.stations.findMany({
-		take: 10,
-		skip: (page - 1) * 10,
-	});
+	const param = searchParams.page || '1';
+	const response = await fetch(`http://localhost:3000/api/stations?page=${param}`);
+	const { stations, page, maxPage } = await response.json();
 
 	return (
 		<div>
-			{stations.map((station) => (
+			{stations.map((station: Station) => (
 				<div key={station.station_id} className='my-2 border-2'>
 					<Link href={`/stations/${station.station_id}`}>
 						<div>{station.station_id}</div>

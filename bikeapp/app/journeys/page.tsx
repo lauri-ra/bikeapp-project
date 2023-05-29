@@ -1,4 +1,4 @@
-import { prisma } from '../../prisma/connect';
+import { Journey } from '@/types';
 import Link from 'next/link';
 
 export default async function Page({
@@ -6,18 +6,10 @@ export default async function Page({
 }: {
 	searchParams: { [key: string]: string | string[] | undefined };
 }) {
-	// These help with the conditial rendering of the nav buttons.
-	const journeyCount = await prisma.journeys.count();
-	const maxPage = Math.round(journeyCount / 10);
-
-	// Make sure that the page is of type string. If it is, turn it to a number, else default to 1.
-	const page = typeof searchParams.page === 'string' ? +searchParams.page : 1;
-
-	// Take 10 elements from the db according to the current page location.
-	const journeys = await prisma.journeys.findMany({
-		take: 10,
-		skip: (page - 1) * 10,
-	});
+	// For some reason queries work only past page 1
+	const param = searchParams.page || '1';
+	const response = await fetch(`http://localhost:3000/api/journeys?page=${param}`);
+	const { journeys, page, maxPage } = await response.json();
 
 	return (
 		<div className='relative mx-8 overflow-x-auto rounded-lg ring-1 ring-neutral-300'>
@@ -31,7 +23,7 @@ export default async function Page({
 					</tr>
 				</thead>
 				<tbody>
-					{journeys.map((journey) => (
+					{journeys.map((journey: Journey) => (
 						<tr key={journey.id} className='hover:bg-neutral-300'>
 							<td className='px-6 py-2.5'>{journey.departure_station_name}</td>
 							<td className='px-6 py-2.5'>{journey.return_station_name}</td>
