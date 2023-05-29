@@ -19,7 +19,7 @@ async function getTopReturns(stationId: number): Promise<Journey[]> {
 
 // Top 5 most popular departure stations for journeys ending at the station
 async function getTopDepartures(stationId: number): Promise<Journey[]> {
-	const getTopDepartures: Journey[] = await prisma.$queryRaw`
+	const topDepartures: Journey[] = await prisma.$queryRaw`
 		SELECT departure_station_id, departure_station_name, COUNT(*) AS departure_count
 		FROM journeys
 		WHERE return_station_id = ${stationId}
@@ -28,7 +28,7 @@ async function getTopDepartures(stationId: number): Promise<Journey[]> {
 		LIMIT 5;
 	`;
 
-	return getTopDepartures;
+	return topDepartures;
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
@@ -39,8 +39,10 @@ export default async function Page({ params }: { params: { id: string } }) {
 	const departures = await prisma.journeys.count({ where: { departure_station_id: stationId } });
 	const returns = await prisma.journeys.count({ where: { return_station_id: stationId } });
 
-	const topReturns: Journey[] = await getTopReturns(stationId);
-	const topDepartures: Journey[] = await getTopDepartures(stationId);
+	const [topReturns, topDepartures] = await Promise.all([
+		getTopReturns(stationId),
+		getTopDepartures(stationId),
+	]);
 
 	return (
 		<StationCard

@@ -20,34 +20,54 @@ const StationCard: React.FC<StationCardProps> = ({
 	const city = station?.city_fi === ' ' ? 'city not specified' : station?.city_fi;
 
 	return (
-		<div>
-			<div className='text-3xl font-semibold tracking-wide'>
-				{station?.station_id} - {station?.station_name_fi}
+		<div className='mt-20 grid grid-cols-3 place-items-center gap-2'>
+			<div className='grid h-full grid-cols-2 gap-3 rounded-lg border border-orange-400 p-4 shadow-md'>
+				<div className='col-span-2 justify-self-start p-2'>
+					<div className='pb-2 text-4xl font-bold'>
+						{station?.station_id}. {station?.station_name_fi}
+					</div>
+					<div className='text-xl font-semibold'>
+						{station?.address_fi}, {city}
+					</div>
+				</div>
+				<div className='mb-2 rounded-md border border-gray-300 p-2'>
+					Capacity of {station?.capacity} bikes
+				</div>
+				<div className='mb-2 rounded-md border border-gray-300 p-2'>Total returns {returns}</div>
+				<div className='mb-2 rounded-md border border-gray-300 p-2'>
+					Total departures {departures}
+				</div>
+				<div className='mb-2 rounded-md border border-gray-300 p-2'>Average departure (km)</div>
+				<div className='mb-2 rounded-md border border-gray-300 p-2'>Average return (km)</div>
 			</div>
-			<div>
-				{station?.address_fi}, {city}
-			</div>
-			<div>Capacity of {station?.capacity} bikes</div>
-			<div>Returns {returns}</div>
-			<div>Departures {departures}</div>
 
-			<div className='my-5'>
-				<div className='font-semibold'>
+			<div className='h-full rounded-lg border border-orange-400 p-4 shadow-md'>
+				<div className='mb-4 font-semibold'>
 					Top return stations for journeys starting from this station
 				</div>
 				{topReturns.map((station) => (
-					<div key={station.return_station_id} className='my-2 border-2'>
+					<div
+						key={station.return_station_id}
+						className='mb-2 rounded-lg border border-gray-300 p-2 hover:bg-sky-200/50'
+					>
 						<Link href={`/stations/${station.return_station_id}`}>
-							<li>{station.return_station_name}</li>
+							<div className='text-blue-500'>{station.return_station_name}</div>
 						</Link>
 					</div>
 				))}
+			</div>
 
-				<div className='font-semibold'>Top stations for journeys ending to this station</div>
+			<div className='h-full rounded-lg border border-orange-400 p-4 shadow-md'>
+				<div className='mb-4 font-semibold'>
+					Top departure stations for journeys ending at this station
+				</div>
 				{topDepartures.map((station) => (
-					<div key={station.departure_station_id} className='my-2 border-2'>
+					<div
+						key={station.departure_station_id}
+						className='mb-2 rounded-md border border-gray-300 p-2 hover:bg-sky-200/50'
+					>
 						<Link href={`/stations/${station.departure_station_id}`}>
-							<li>{station.departure_station_name}</li>
+							<div className='text-blue-500'>{station.departure_station_name}</div>
 						</Link>
 					</div>
 				))}
