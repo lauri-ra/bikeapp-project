@@ -31,6 +31,38 @@ async function getTopDepartures(stationId: number): Promise<Journey[]> {
 	return topDepartures;
 }
 
+async function getAvgDeparture(stationId: number): Promise<string | null> {
+	const result = await prisma.journeys.aggregate({
+		_avg: {
+			covered_distance_m: true,
+		},
+		where: {
+			departure_station_id: stationId,
+		},
+	});
+
+	// Get the average result from the query and return it in km
+	const average = result._avg.covered_distance_m;
+	const averageInKm = average ? (average / 1000).toFixed(2) : null;
+	return averageInKm;
+}
+
+async function getAvgReturn(stationId: number): Promise<string | null> {
+	const result = await prisma.journeys.aggregate({
+		_avg: {
+			covered_distance_m: true,
+		},
+		where: {
+			return_station_id: stationId,
+		},
+	});
+
+	// Get the average result from the query and return it in km
+	const average = result._avg.covered_distance_m;
+	const averageInKm = average ? (average / 1000).toFixed(2) : null;
+	return averageInKm;
+}
+
 export default async function Page({ params }: { params: { id: string } }) {
 	const stationId = parseInt(params.id);
 
@@ -44,6 +76,11 @@ export default async function Page({ params }: { params: { id: string } }) {
 		getTopDepartures(stationId),
 	]);
 
+	const [avgDeparture, avgReturn] = await Promise.all([
+		getAvgDeparture(stationId),
+		getAvgReturn(stationId),
+	]);
+
 	return (
 		<StationCard
 			station={station}
@@ -51,6 +88,8 @@ export default async function Page({ params }: { params: { id: string } }) {
 			returns={returns}
 			topReturns={topReturns}
 			topDepartures={topDepartures}
+			avgDeparture={avgDeparture}
+			avgReturn={avgReturn}
 		/>
 	);
 }

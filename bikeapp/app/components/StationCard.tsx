@@ -8,6 +8,8 @@ interface StationCardProps {
 	returns: number;
 	topReturns: Journey[];
 	topDepartures: Journey[];
+	avgDeparture: string | null;
+	avgReturn: string | null;
 }
 
 const StationCard: React.FC<StationCardProps> = ({
@@ -16,6 +18,8 @@ const StationCard: React.FC<StationCardProps> = ({
 	returns,
 	topReturns,
 	topDepartures,
+	avgDeparture,
+	avgReturn,
 }) => {
 	const city = station?.city_fi === ' ' ? 'city not specified' : station?.city_fi;
 
@@ -37,8 +41,12 @@ const StationCard: React.FC<StationCardProps> = ({
 				<div className='mb-2 rounded-md border border-gray-300 p-2'>
 					Total departures {departures}
 				</div>
-				<div className='mb-2 rounded-md border border-gray-300 p-2'>Average departure (km)</div>
-				<div className='mb-2 rounded-md border border-gray-300 p-2'>Average return (km)</div>
+				<div className='mb-2 rounded-md border border-gray-300 p-2'>
+					Average departure {avgDeparture} km
+				</div>
+				<div className='mb-2 rounded-md border border-gray-300 p-2'>
+					Average return {avgReturn} km
+				</div>
 			</div>
 
 			<div className='h-full rounded-lg border border-orange-400 p-4 shadow-md'>
