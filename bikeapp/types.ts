@@ -24,3 +24,12 @@ export interface Station {
 	lat: Prisma.Decimal;
 	lon: Prisma.Decimal;
 }
+
+export interface StationStats {
+	departures: number;
+	returns: number;
+	topDepartures: Journey[];
+	topReturns: Journey[];
+	avgDeparture: string;
+	avgReturn: string;
+}

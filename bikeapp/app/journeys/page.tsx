@@ -7,7 +7,6 @@ export default async function Page({
 }: {
 	searchParams: { [key: string]: string | string[] | undefined };
 }) {
-	// For some reason queries work only past page 1
 	const param = searchParams.page || '1';
 	const response = await axios.get(`http://localhost:3000/api/journeys?page=${param}`);
 	const { journeys, page, maxPage } = await response.data;

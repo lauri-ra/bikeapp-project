@@ -1,26 +1,13 @@
 import React from 'react';
 import Link from 'next/link';
-import { Journey, Station } from '@/types';
+import { Journey, Station, StationStats } from '@/types';
 
 interface StationCardProps {
 	station: Station | null;
-	departures: number;
-	returns: number;
-	topReturns: Journey[];
-	topDepartures: Journey[];
-	avgDeparture: string | null;
-	avgReturn: string | null;
+	stats: StationStats;
 }
 
-const StationCard: React.FC<StationCardProps> = ({
-	station,
-	departures,
-	returns,
-	topReturns,
-	topDepartures,
-	avgDeparture,
-	avgReturn,
-}) => {
+const StationCard: React.FC<StationCardProps> = ({ station, stats }) => {
 	const city = station?.city_fi === ' ' ? 'city not specified' : station?.city_fi;
 
 	return (
@@ -37,15 +24,17 @@ const StationCard: React.FC<StationCardProps> = ({
 				<div className='mb-2 rounded-md border border-gray-300 p-2'>
 					Capacity of {station?.capacity} bikes
 				</div>
-				<div className='mb-2 rounded-md border border-gray-300 p-2'>Total returns {returns}</div>
 				<div className='mb-2 rounded-md border border-gray-300 p-2'>
-					Total departures {departures}
+					Total returns {stats.returns}
 				</div>
 				<div className='mb-2 rounded-md border border-gray-300 p-2'>
-					Average departure {avgDeparture} km
+					Total departures {stats.departures}
 				</div>
 				<div className='mb-2 rounded-md border border-gray-300 p-2'>
-					Average return {avgReturn} km
+					Average departure {stats.avgDeparture} km
+				</div>
+				<div className='mb-2 rounded-md border border-gray-300 p-2'>
+					Average return {stats.avgReturn} km
 				</div>
 			</div>
 
@@ -53,13 +42,13 @@ const StationCard: React.FC<StationCardProps> = ({
 				<div className='mb-4 font-semibold'>
 					Top return stations for journeys starting from this station
 				</div>
-				{topReturns.map((station) => (
+				{stats.topReturns.map((journey: Journey) => (
 					<div
-						key={station.return_station_id}
+						key={journey.return_station_id}
 						className='mb-2 rounded-lg border border-gray-300 p-2 hover:bg-sky-200/50'
 					>
-						<Link href={`/stations/${station.return_station_id}`}>
-							<div className='text-blue-500'>{station.return_station_name}</div>
+						<Link href={`/stations/${journey.return_station_id}`}>
+							<div className='text-blue-500'>{journey.return_station_name}</div>
 						</Link>
 					</div>
 				))}
@@ -69,13 +58,13 @@ const StationCard: React.FC<StationCardProps> = ({
 				<div className='mb-4 font-semibold'>
 					Top departure stations for journeys ending at this station
 				</div>
-				{topDepartures.map((station) => (
+				{stats.topDepartures.map((journey: Journey) => (
 					<div
-						key={station.departure_station_id}
+						key={journey.departure_station_id}
 						className='mb-2 rounded-md border border-gray-300 p-2 hover:bg-sky-200/50'
 					>
-						<Link href={`/stations/${station.departure_station_id}`}>
-							<div className='text-blue-500'>{station.departure_station_name}</div>
+						<Link href={`/stations/${journey.departure_station_id}`}>
+							<div className='text-blue-500'>{journey.departure_station_name}</div>
 						</Link>
 					</div>
 				))}
