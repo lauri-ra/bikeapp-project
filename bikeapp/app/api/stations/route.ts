@@ -6,10 +6,6 @@ export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);
 	const param = searchParams.get('page');
 
-	// These help with the conditial rendering of the nav buttons.
-	const stationCount = await prisma.stations.count();
-	const maxPage = Math.ceil(stationCount / 10);
-
 	// Make sure that the page is of type string. If it is, turn it to a number, else default to 1.
 	const page = typeof param === 'string' ? +param : 1;
 
@@ -19,5 +15,5 @@ export async function GET(request: Request) {
 		skip: (page - 1) * 10,
 	});
 
-	return NextResponse.json({ stations, page, maxPage });
+	return NextResponse.json({ stations, page });
 }

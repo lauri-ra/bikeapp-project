@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { Journey } from '@/types';
 import Link from 'next/link';
+import { Journey } from '@/types';
+import { prisma } from '@/prisma/connect';
 
 export default async function Page({
 	searchParams,
@@ -9,7 +10,11 @@ export default async function Page({
 }) {
 	const param = searchParams.page || '1';
 	const response = await axios.get(`http://localhost:3000/api/journeys?page=${param}`);
-	const { journeys, page, maxPage } = await response.data;
+	const { journeys, page } = await response.data;
+
+	// These help with the conditial rendering of the nav buttons.
+	const journeyCount = await prisma.journeys.count();
+	const maxPage = Math.ceil(journeyCount / 10);
 
 	return (
 		<div className='relative mx-8 overflow-x-auto rounded-lg ring-1 ring-neutral-300'>

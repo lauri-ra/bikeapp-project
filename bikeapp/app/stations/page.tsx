@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { Station } from '@/types';
 import Link from 'next/link';
+import { Station } from '@/types';
+import { prisma } from '@/prisma/connect';
 
 export default async function Page({
 	searchParams,
@@ -9,7 +10,11 @@ export default async function Page({
 }) {
 	const param = searchParams.page || '1';
 	const response = await axios.get(`http://localhost:3000/api/stations?page=${param}`);
-	const { stations, page, maxPage } = await response.data;
+	const { stations, page } = await response.data;
+
+	// These help with the conditial rendering of the nav buttons.
+	const stationCount = await prisma.stations.count();
+	const maxPage = Math.ceil(stationCount / 10);
 
 	return (
 		<div>
