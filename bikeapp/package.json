@@ -6,7 +6,8 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"cypress": "cypress open"
 	},
 	"dependencies": {
 		"@prisma/client": "^4.14.1",
@@ -25,6 +26,7 @@
 		"typescript": "5.0.4"
 	},
 	"devDependencies": {
+		"cypress": "^12.13.0",
 		"prettier": "^2.8.8",
 		"prettier-plugin-tailwindcss": "^0.3.0",
 		"prisma": "^4.14.1"
