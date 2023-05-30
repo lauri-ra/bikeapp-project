@@ -8,7 +8,7 @@ export async function GET(request: Request) {
 
 	// These help with the conditial rendering of the nav buttons.
 	const stationCount = await prisma.stations.count();
-	const maxPage = Math.round(stationCount / 10);
+	const maxPage = Math.ceil(stationCount / 10);
 
 	// Make sure that the page is of type string. If it is, turn it to a number, else default to 1.
 	const page = typeof param === 'string' ? +param : 1;

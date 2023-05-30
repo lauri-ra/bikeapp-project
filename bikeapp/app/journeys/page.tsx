@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Journey } from '@/types';
 import Link from 'next/link';
 
@@ -8,8 +9,8 @@ export default async function Page({
 }) {
 	// For some reason queries work only past page 1
 	const param = searchParams.page || '1';
-	const response = await fetch(`http://localhost:3000/api/journeys?page=${param}`);
-	const { journeys, page, maxPage } = await response.json();
+	const response = await axios.get(`http://localhost:3000/api/journeys?page=${param}`);
+	const { journeys, page, maxPage } = await response.data;
 
 	return (
 		<div className='relative mx-8 overflow-x-auto rounded-lg ring-1 ring-neutral-300'>

@@ -1,14 +1,14 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { prisma } from '../../../prisma/connect';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
 	// Get the current page from the url params
 	const { searchParams } = new URL(request.url);
 	const param = searchParams.get('page');
 
 	// These help with the conditial rendering of the nav buttons.
 	const journeyCount = await prisma.journeys.count();
-	const maxPage = Math.round(journeyCount / 10);
+	const maxPage = Math.ceil(journeyCount / 10);
 
 	// Make sure that the page is of type string. If it is, turn it to a number, else default to 1.
 	const page = typeof param === 'string' ? +param : 1;

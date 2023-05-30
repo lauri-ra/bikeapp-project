@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Station } from '@/types';
 import Link from 'next/link';
 
@@ -7,8 +8,8 @@ export default async function Page({
 	searchParams: { [key: string]: string | string[] | undefined };
 }) {
 	const param = searchParams.page || '1';
-	const response = await fetch(`http://localhost:3000/api/stations?page=${param}`);
-	const { stations, page, maxPage } = await response.json();
+	const response = await axios.get(`http://localhost:3000/api/stations?page=${param}`);
+	const { stations, page, maxPage } = await response.data;
 
 	return (
 		<div>
