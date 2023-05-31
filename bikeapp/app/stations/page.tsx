@@ -18,14 +18,16 @@ export default async function Page({
 
 	return (
 		<div>
-			{stations.map((station: Station) => (
-				<div key={station.station_id} className='my-2 border-2'>
-					<Link href={`/stations/${station.station_id}`}>
-						<div>{station.station_id}</div>
-						<div>{station.station_name_fi}</div>
-					</Link>
-				</div>
-			))}
+			<div id='station-list'>
+				{stations.map((station: Station) => (
+					<div id='station' key={station.station_id} className='my-2 border-2'>
+						<Link href={`/stations/${station.station_id}`}>
+							<div>{station.station_id}</div>
+							<div>{station.station_name_fi}</div>
+						</Link>
+					</div>
+				))}
+			</div>
 			<div className='flex items-center justify-center'>
 				{page > 1 && (
 					<Link

@@ -10,6 +10,9 @@ describe('Journeys Page Component', () => {
 
 		// Ensure that there are journey rows in the table
 		cy.get<HTMLTableRowElement>('tbody tr').should('have.length.gt', 0);
+
+		// Ensure that the full table contains 10 elements
+		cy.get<HTMLTableRowElement>('tbody tr').should('have.length', 10);
 	});
 
 	it('should navigate to the next page when "Next" button is clicked', function () {
