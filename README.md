@@ -47,7 +47,14 @@ npm start
 The application will start locally at [http://localhost:3000](http://localhost:3000)
 
 ## E2E Testing
-todo
+
+First make sure that you are in the bikeapp directory
+
+#### Running tests for production build
+Run ```npm run test```. This tests the production build. For changes to take affect, you need to run ```npm run build``` prior.
+
+#### Running tests in development
+Run ```npm run dev```. Open another terminal window in the same directory and run ```npm run test:dev```
 
 ## Stack
 
