@@ -1,6 +1,6 @@
 ## BikeApp
 
-This guide is work in progress
+This guide is for importing data to the Supabase database that the bikeapp requires to fucntion.
 
 ### Initializing the database with Python
 
