@@ -7,7 +7,7 @@ from data_processing import process_journey_data, process_station_data
 
 def main():
     # Get variables from .env file
-    load_dotenv('../.env')
+    load_dotenv('.env')
     url = os.getenv('SB_API')
     key = os.getenv('SB_KEY')
 
@@ -24,10 +24,10 @@ def main():
     # Combine journey CSVs into one dataframe
     journeys = pd.concat([data_may, data_june, data_july])
 
-    # Process journey data
+    # # Process journey data
     process_journey_data(journeys, supabase)
 
-    # Process and import station data
+    # # Process and import station data
     process_station_data(stations, supabase)
 
     print("\nData import complete.")
