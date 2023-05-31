@@ -75,7 +75,175 @@ Contains everything related to E2E tests. The ```e2e``` folder has all the test 
 
 
 ## API
-todo
+The backend API is implemented with the NextJS API route handlers. This means that it is not a persistent backend, and only runs when the application itself is runnning. These are the routes configured:
+
+#### GET journeys
+
+```
+GET /api/journeys/?page={number}
+```
+Returns an array of 10 journeys and the current page number from the url. The returned journeys are dependent on the page number (for the pagination). For example if we fetch data for page 2, the query skips the first ten items and returns items 11-20. If no page number is configured in the URL, it defaults to 1.
+
+```
+{
+  journeys: [
+    {
+      id: 1690397,
+      return: "2021-06-01T00:05:46.000Z",
+      departure_station_id: 94,
+      departure_station_name: "Laajalahden aukio",
+      return_station_id: 100,
+      return_station_name: "Teljäntie",
+      covered_distance_m: 2043,
+      duration_s: 500,
+      departure: "2021-05-31T23:57:25.000Z"
+    },
+    {
+      id: 1690398,
+      return: "2021-06-01T00:07:14.000Z",
+      departure_station_id: 82,
+      departure_station_name: "Töölöntulli",
+      return_station_id: 113,
+      return_station_name: "Pasilan asema",
+      covered_distance_m: 1870,
+      duration_s: 611,
+      departure: "2021-05-31T23:56:59.000Z"
+    },
+    .
+    .
+    .
+  page: 1
+ }
+```
+
+----
+
+#### GET stations
+
+```
+GET /api/stations?page={number}
+```
+Returns an array of 10 stations and the current page number from the url. The returned stations are dependent on the page number (for the pagination). For example if we fetch data for page 2, the query skips the first ten items and returns items 11-20. If no page number is configured in the URL, it defaults to 1.
+
+```
+{
+  stations: [
+    {
+      station_id: 1,
+      station_name_fi: "Kaivopuisto",
+      station_name_swe: "Brunnsparken",
+      address_fi: "Meritori 1",
+      address_swe: "Havstorget 1",
+      city_fi: " ",
+      city_swe: " ",
+      capacity: 30,
+      lat: "24.9502114714031",
+      lon: "60.155369615074"
+    },
+    {
+      station_id: 2,
+      station_name_fi: "Laivasillankatu",
+      station_name_swe: "Skeppsbrogatan",
+      address_fi: "Laivasillankatu 14",
+      address_swe: "Skeppsbrogatan 14",
+      city_fi: " ",
+      city_swe: " ",
+      capacity: 12,
+      lat: "24.9565097715858",
+      lon: "60.1609890692806"
+    },
+    .
+    .
+    .
+   page: 1
+}
+```
+
+----
+
+#### GET single station
+
+```
+GET /api/stations/{id}
+```
+Returns an object containing the station that matches the ID in the URL.
+
+```
+{
+  station_id: 7,
+  station_name_fi: "Designmuseo",
+  station_name_swe: "Designmuseet",
+  address_fi: "Korkeavuorenkatu 23",
+  address_swe: "Högbergsgatan 23",
+  city_fi: " ",
+  city_swe: " ",
+  capacity: 14,
+  lat: "24.9459599998806",
+  lon: "60.16310319166"
+}
+```
+
+----
+
+#### GET statistics for single station
+
+```
+GET /api/stations/id/stats
+```
+Returns an object containing the statistics for station that matches the ID in the URL.
+
+```
+{
+  departures: 4106,
+  returns: 4105,
+  topDepartures: [
+    {
+      departure_station_id: 21,
+      departure_station_name: "Töölönlahdenkatu"
+    },
+    {
+      departure_station_id: 12,
+      departure_station_name: "Kanavaranta"
+    },
+    {
+      departure_station_id: 24,
+      departure_station_name: "Mannerheimintie"
+    },
+    {
+      departure_station_id: 19,
+      departure_station_name: "Rautatientori / itä"
+    },
+    {
+      departure_station_id: 26,
+      departure_station_name: "Kamppi (M)"
+    }
+  ],
+  topReturns: [
+    {
+      return_station_id: 12,
+      return_station_name: "Kanavaranta"
+    },
+    {
+      return_station_id: 19,
+      return_station_name: "Rautatientori / itä"
+    },
+    {
+      return_station_id: 21,
+      return_station_name: "Töölönlahdenkatu"
+    },
+    {
+      return_station_id: 22,
+      return_station_name: "Rautatientori / länsi"
+    },
+    {
+      return_station_id: 24,
+      return_station_name: "Mannerheimintie"
+    }
+  ],
+  avgDeparture: "2.16",
+  avgReturn: "2.17"
+}
+```
 
 ## What could be improved
 - Better error handling
