@@ -4,6 +4,7 @@
 
 ## Contents
 - [Running the app locally](https://github.com/lauri-ra/bikeapp-project/blob/main/README.md#how-to-run-the-app-locally)
+- [E2E testing](https://github.com/lauri-ra/bikeapp-project/blob/main/README.md#e2e-testing)
 - [Tech stack](https://github.com/lauri-ra/bikeapp-project/blob/main/README.md#stack)
 - [Project structure](https://github.com/lauri-ra/bikeapp-project/blob/main/README.md#project-structure)
 - [API](https://github.com/lauri-ra/bikeapp-project/blob/main/README.md#api)
@@ -45,6 +46,9 @@ npm start
 
 The application will start locally at [http://localhost:3000](http://localhost:3000)
 
+## E2E Testing
+todo
+
 ## Stack
 
 ### NextJS
@@ -53,7 +57,22 @@ This app is built with NextJS 13.4. I chose this framework, because along with f
 Data is fetched from database using Prisma ORM. Most of queries are fairly simple and Prisma provides full typesafety with TypeScript.
 
 ## Project structure
-todo
+The project is divided in two main directories. Data contains all the stuff that is needed to read and import the data to the database. Bikeapp is the actual application with frontend and backend routes. The application is built with NextJS app router and follows the structure provided in their [documentation](https://nextjs.org/docs/getting-started/project-structure). Here is a short summary if the structure for this project.
+
+#### app -folder
+- ```api``` folder contains the API routes that fetch the data from the database. Both journeys and stations have their respective route handlers. The [id] folder inside the stations is the dynamic route for single station data.
+- ```components``` folder has client side components
+-  ```journeys``` and  ```stations``` contain the page components. As in the api folder, here the nested [id] contains the dynamic page for single station view.
+-  ```page.tsx``` main homepage
+-  ```layout.tsx``` root or the main layout for the app
+
+#### cypress -folder
+Contains everything related to E2E tests. The ```e2e``` folder has all the test files in it.
+
+#### prisma -folder
+-  ```connect.ts``` sets up and exports a prisma client that can be used app-wide to access Prisma
+-  ```schema.prisma``` main config file for prisma. Contains the generator, datasource and data models. More about this [here](https://www.prisma.io/docs/concepts/components/prisma-schema)
+
 
 ## API
 todo
