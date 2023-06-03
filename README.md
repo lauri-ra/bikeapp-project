@@ -27,6 +27,12 @@ Move to the **data** directory and import data with the python script in the fol
 
 ### Running the application
 
+Create a .env file with this variable in the bikapp directory. NOTE: The database URL was sent along with the dev academy application.
+
+```
+DATABASE_URL=
+```
+
 In the bikeapp directory start by installing required dependencies
 
 ```
