@@ -19,7 +19,7 @@ def main():
     data_may = pd.read_csv('2021-05.csv')
     data_june = pd.read_csv('2021-06.csv')
     data_july = pd.read_csv('2021-07.csv')
-    stations = pd.read_csv('locationdata.csv')
+    stations = pd.read_csv('Helsingin_ja_Espoon_kaupunkipy%C3%B6r%C3%A4asemat_avoin.csv')
 
     # Combine journey CSVs into one dataframe
     journeys = pd.concat([data_may, data_june, data_july])

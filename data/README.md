@@ -5,6 +5,7 @@ This guide is for importing data to the Supabase database that the bikeapp requi
 ### Initializing the database with Python
 
 Download these .csv files and place them in the data folder.
+
 - https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv
 - https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv
 - https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv
@@ -33,7 +34,7 @@ Install the required libraries for Python
 
 ```
 pip install pandas
-pip install supabase-py
+pip install supabase
 pip install python-dotenv
 pip install numpy
 ```
